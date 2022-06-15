@@ -2,14 +2,13 @@
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-
 import components.Controller;
 import util.Maths;
 
 public class Camera extends GameObject{
-	private static final float FOV = 15;
+	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.01f;
-	private static final float FAR_PLANE = 1000;
+	private static final float FAR_PLANE = 3000;
 	private Matrix4f projectionMatrix;
 	private GameObject target;
 	
@@ -28,11 +27,10 @@ public class Camera extends GameObject{
 			target.getComponent(Controller.class).updateController(dt);
 		}
 		this.setPosition(target.transform.position);
-		//System.out.println(this.transform.position.x + ", " + this.transform.position.y + ", " + this.transform.position.z);
 	}
 	
 	public void adjustProjection() {
-		projectionMatrix = new Matrix4f().perspective(FOV, 920f/900f, NEAR_PLANE, FAR_PLANE);
+		projectionMatrix = new Matrix4f().perspective(FOV, 1920f/1000f, NEAR_PLANE, FAR_PLANE);
 	}
 	
 	public Matrix4f getViewMatrix() {

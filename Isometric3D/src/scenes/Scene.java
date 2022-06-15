@@ -8,7 +8,6 @@ import main.GameObject;
 import renderer.Renderer;
 
 public abstract class Scene {	
-	
 	protected Camera camera;
 	protected Renderer renderer = new Renderer();
 	private boolean isRunning = false;
