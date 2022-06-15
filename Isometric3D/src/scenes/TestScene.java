@@ -1,21 +1,15 @@
 package scenes;
 
 import org.joml.Vector3f;
-
-import components.Controller;
 import components.ModelTexture;
 import components.TexturedModelRenderer;
 import main.Camera;
 import main.GameObject;
+import main.Transform;
 import util.OBJLoader;
 import util.TextureLoader;
 
 public class TestScene extends Scene{
-	
-	int costume = 0;
-	float spriteFrameTime = 0.2f;
-	float spriteFrameTimeLeft = 0.0f;
-	
 	GameObject test;
 	
 	public TestScene() {
@@ -25,32 +19,25 @@ public class TestScene extends Scene{
 	@Override
 	public void init() {
 		camera = new Camera(new Vector3f(0, 0, 2));
+		this.addGameObjectToScene(camera);
 		
-		GameObject cube = new GameObject("cube");
-		test = cube;
-		cube.addComponent(
+		GameObject dragon = new GameObject(
+			"dragon",
+			new Transform(0.1f)
+		);
+		dragon.addComponent(
 			new TexturedModelRenderer(
-				OBJLoader.loadOBJModel("assets/models/cube.obj"),
+				OBJLoader.loadOBJModel("assets/models/dragon.obj"),
 				new ModelTexture(TextureLoader.loadTexture("assets/textures/blank.png"))
 			)
 		);
-		cube.addComponent(new Controller());
-		this.addGameObjectToScene(camera);
-		this.addGameObjectToScene(cube);
+		this.addGameObjectToScene(dragon);
 	}
 
 	@Override
 	public void update(float dt) {
 		for(GameObject g : gameObjects) {
 			g.update(dt);
-		}
-		test.transform.rotation.x += 0.5;
-		test.transform.rotation.y += 0.5;
-		if(test.transform.rotation.x > 360) {
-			test.transform.rotation.x = 0;
-		}
-		if(test.transform.rotation.y > 360) {
-			test.transform.rotation.y = 0;
 		}
 		this.renderer.render();
 	}

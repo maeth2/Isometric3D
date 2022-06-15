@@ -3,6 +3,8 @@ package renderer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.joml.Vector3f;
+
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
@@ -57,6 +59,7 @@ public class RenderBatch {
 		Shaders.loadMatrix(shaderID, "uProjection", Window.getScene().getCamera().getProjectionMatrix());
 		Shaders.loadMatrix(shaderID, "uView", Window.getScene().getCamera().getViewMatrix());		
 		Shaders.loadIntArray(shaderID, "uTextures", texSlots);
+		Shaders.loadVector3f(shaderID, "uLightPosition", new Vector3f(100000f, 10000f, 10000f));
 		
 		for(int i = 0; i < textures.size(); i++) {
 			TextureLoader.loadTextureToShader(shaderID, textures.get(i), i + 1);
@@ -67,6 +70,7 @@ public class RenderBatch {
 		// Enable the vertex attribute pointers
 		glEnableVertexAttribArray(0); 
 		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
 
 		for(TexturedModelRenderer m : models.keySet()) {
 			Shaders.loadMatrix(shaderID, "uTransformation", Maths.createTransformationalMatrix(m.gameObject.transform));
@@ -82,6 +86,7 @@ public class RenderBatch {
 		
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 		glBindVertexArray(0);
 	}
 	

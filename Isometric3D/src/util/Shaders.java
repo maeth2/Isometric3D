@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL20;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -113,10 +115,23 @@ public class Shaders {
 	 * 
 	 * @param shaderID			Shader program ID
 	 * @param name				Name of uniform variable
-	 * @param integer			Integer to upload	 */
+	 * @param integer			Integer to upload	 
+	 */
 	public static void loadInt(int shaderID, String name, int integer) {
 		int location = glGetUniformLocation(shaderID, name);
 		glUniform1i(location, integer);
+	}
+	
+	/**
+	 * Uploads Vector3f into uniform variable in shader
+	 * 
+	 * @param shaderID			Shader program ID
+	 * @param name				Name of uniform variable
+	 * @param vector			Vector3f to upload	 
+	 */
+	public static void loadVector3f(int shaderID, String name, Vector3f vector){//Changes vector variables in shader program
+		int location = glGetUniformLocation(shaderID, name);
+		GL20.glUniform3f(location, vector.x, vector.y, vector.z);
 	}
 	
 	/**
