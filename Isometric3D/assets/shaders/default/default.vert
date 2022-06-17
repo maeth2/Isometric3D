@@ -4,18 +4,18 @@ layout(location=1) in vec2 aTexCoords;
 layout(location=2) in vec3 aNormal;
 
 out vec2 fTexCoords;
-out vec3 fToLightVector;
-out vec3 fSurfaceNormal;
+out vec3 fPosition;
+flat out vec3 fSurfaceNormal;
 
-uniform vec3 uLightPosition;
 uniform mat4 uProjection;
 uniform mat4 uTransformation;
 uniform mat4 uView;
 
 void main(){
 	fTexCoords = aTexCoords;
-	vec4 worldPosition = uTransformation * vec4(aPos,1.0);
-	gl_Position = uProjection * uView * uTransformation * vec4(aPos,1.0);
-	fSurfaceNormal = aNormal;
-	fToLightVector = uLightPosition - worldPosition.xyz;
+	mat4 modelViewMatrix = uView * uTransformation;
+	fSurfaceNormal = (uTransformation * vec4(aNormal, 0.0)).xyz;
+	vec4 mvPosition = modelViewMatrix * vec4(aPos,1.0);
+	gl_Position = uProjection * mvPosition;
+	fPosition = mvPosition.xyz;
 }

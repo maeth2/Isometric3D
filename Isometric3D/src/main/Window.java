@@ -3,12 +3,14 @@ package main;
 import static org.lwjgl.glfw.GLFW.*;
 
 import org.lwjgl.Version;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import listeners.KeyListener;
 import listeners.MouseListener;
 import scenes.Scene;
 import scenes.TestScene;
+import util.AssetManager;
 import util.Helper;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -114,6 +116,8 @@ public class Window {
 		glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);
 		
+		glfwSetInputMode(glfwWindow, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+
 		System.out.println("WINDOW CREATED!");
 		
 		Window.changeScene(0);
@@ -136,15 +140,19 @@ public class Window {
 			
 			glfwSwapBuffers(glfwWindow);
 
-			if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+			if(KeyListener.isKeyPressed(GLFW_KEY_F)) {
 				System.out.println("FPS: " + 1/dt);
+			}
+			
+			if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) {
+				break;
 			}
 			
 			endTime = (float)glfwGetTime();
 			dt = endTime - beginTime;
 			beginTime = endTime;
 		}
-		
+		AssetManager.dispose();
 		Helper.dispose();
 	}
 	

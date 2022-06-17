@@ -6,13 +6,13 @@ import org.lwjgl.glfw.GLFW;
 import listeners.KeyListener;
 import listeners.MouseListener;
 
-public class Controller extends Component {
-	private float speed = 1f;
+public class ControllerComponent extends Component {
+	private float speed = 5f;
 	private float lastMouseX, lastMouseY;
 	private float sensitivity = 0.07f;
 	public Vector3f forward, backward, right, left, up, down;
 	
-	public Controller() {
+	public ControllerComponent() {
 		lastMouseX = MouseListener.getX();
 		lastMouseY = MouseListener.getY();
 	}
@@ -35,7 +35,7 @@ public class Controller extends Component {
 		backward = new Vector3f(-forward.x, -forward.y, -forward.z);
 		right = new Vector3f(cosY, 0, sinY);
 		left = new Vector3f(-right.x, -right.y, -right.z);
-		up = new Vector3f(0, speed, 0);
+		up = new Vector3f(0, 1f, 0);
 		down = new Vector3f(-up.x, -up.y, -up.z);
 		
 		if(KeyListener.isKeyPressed(GLFW.GLFW_KEY_W)) {

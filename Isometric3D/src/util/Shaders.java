@@ -11,10 +11,12 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
 
+import components.LightComponent;
+import components.Material;
+
 import static org.lwjgl.opengl.GL20.*;
 
-public class Shaders {
-	
+public class Shaders {	
 	/**
 	 * Find and build GLSL shader program from directory
 	 * 
@@ -23,7 +25,7 @@ public class Shaders {
 	 */
 	public static int buildShader(String path) {
 		int vertexID = 0, fragmentID = 0, shaderID;
-		
+
 		File file = new File(path);
 		for(File f : file.listFiles()) {
 			String p = f.getPath();
@@ -101,12 +103,12 @@ public class Shaders {
 	 * 
 	 * @param shaderID			Shader program ID
 	 * @param name				Name of uniform variable
-	 * @param matrix			Matrix4f to upload
+	 * @param data				Matrix4f to upload
 	 */
-	public static void loadMatrix(int shaderID, String name, Matrix4f matrix){
+	public static void loadMatrix(int shaderID, String name, Matrix4f data){
 		int location = glGetUniformLocation(shaderID, name);
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
-		matrix.get(buffer);
+		data.get(buffer);
 		glUniformMatrix4fv(location, false, buffer);
 	}
 	
@@ -115,11 +117,35 @@ public class Shaders {
 	 * 
 	 * @param shaderID			Shader program ID
 	 * @param name				Name of uniform variable
-	 * @param integer			Integer to upload	 
+	 * @param data				Integer to upload	 
 	 */
-	public static void loadInt(int shaderID, String name, int integer) {
+	public static void loadInt(int shaderID, String name, int data) {
 		int location = glGetUniformLocation(shaderID, name);
-		glUniform1i(location, integer);
+		glUniform1i(location, data);
+	}
+	
+	/**
+	 * Uploads Boolean into uniform variable in shader
+	 * 
+	 * @param shaderID			Shader program ID
+	 * @param name				Name of uniform variable
+	 * @param data				Boolean to upload	 
+	 */
+	public static void loadBool(int shaderID, String name, boolean data) {
+		int location = glGetUniformLocation(shaderID, name);
+		glUniform1i(location, data ? 1 : 0);
+	}
+	
+	/**
+	 * Uploads Float into uniform variable in shader
+	 * 
+	 * @param shaderID			Shader program ID
+	 * @param name				Name of uniform variable
+	 * @param data				Float to upload	 
+	 */
+	public static void loadFloat(int shaderID, String name, float data) {
+		int location = glGetUniformLocation(shaderID, name);
+		glUniform1f(location, data);
 	}
 	
 	/**
@@ -127,11 +153,11 @@ public class Shaders {
 	 * 
 	 * @param shaderID			Shader program ID
 	 * @param name				Name of uniform variable
-	 * @param vector			Vector3f to upload	 
+	 * @param data				Vector3f to upload	 
 	 */
-	public static void loadVector3f(int shaderID, String name, Vector3f vector){//Changes vector variables in shader program
+	public static void loadVector3f(int shaderID, String name, Vector3f data){//Changes vector variables in shader program
 		int location = glGetUniformLocation(shaderID, name);
-		GL20.glUniform3f(location, vector.x, vector.y, vector.z);
+		GL20.glUniform3f(location, data.x, data.y, data.z);
 	}
 	
 	/**
@@ -139,11 +165,37 @@ public class Shaders {
 	 * 
 	 * @param shaderID			Shader program ID
 	 * @param name				Name of uniform variable
-	 * @param array				Array to upload	 
+	 * @param data				Array to upload	 
 	 */
-	public static void loadIntArray(int shaderID, String name, int[] array) {
+	public static void loadIntArray(int shaderID, String name, int[] data) {
 		int location = glGetUniformLocation(shaderID, name);
-		glUniform1iv(location, array);
+		glUniform1iv(location, data);
+	}
+	
+	/**
+	 * Uploads Light data into uniform variable in shader
+	 * 
+	 * @param shaderID			Shader program ID
+	 * @param name				Name of uniform variable
+	 * @param data				Light data to upload	 
+	 */
+	public static void loadLight(int shaderID, String name, LightComponent data) {
+		loadVector3f(shaderID, name + ".position", data.gameObject.transform.position);
+		loadVector3f(shaderID, name + ".color", data.getColor());
+		loadFloat(shaderID, name + ".intensity", data.getIntensity());
+		loadInt(shaderID, name + ".type", data.getLightType());
+	}
+	
+	/**
+	 * Uploads Material data into uniform variable in shader
+	 * 
+	 * @param shaderID			Shader program ID
+	 * @param name				Name of uniform variable
+	 * @param data				Material data to upload	 
+	 */
+	public static void loadMaterial(int shaderID, String name, Material data) {
+		loadFloat(shaderID, name + ".reflectance", data.getReflectance());
+		loadBool(shaderID, name + ".hasTexture", data.getTextureID() != 0);
 	}
 	
 	/**

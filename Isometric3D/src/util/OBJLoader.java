@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.joml.Vector2f;
@@ -16,18 +14,13 @@ import components.Model;
 
 
 public class OBJLoader {
-	private static HashMap<String, Model> cachedModels = new HashMap<>();
 	/**
 	 * Loads an .OBJ file from system
 	 * 
 	 * @param file			file path
 	 * @return				Raw model
 	 */
-	public static Model loadOBJModel(String file){//Loads obj file into textured model and raw model
-		if(cachedModels.containsKey(file)) {
-			return cachedModels.get(file);
-		}
-		
+	public static Model loadOBJModel(String file){//Loads obj file into textured model and raw model	
 		FileReader fr = null;
 		try {
 			fr = new FileReader(new File(file));//Gets OBJ file
@@ -101,15 +94,11 @@ public class OBJLoader {
 			e.printStackTrace();
 		}
 		int vaoID = Helper.generateVAO();
-		System.out.println(Arrays.toString(verticesArray));
-		System.out.println(Arrays.toString(indicesArray));
-		System.out.println(Arrays.toString(normalsArray));
 		Helper.storeDataInAttributeList(vaoID, 3, 0, verticesArray);
 		Helper.storeDataInAttributeList(vaoID, 2, 1, texturesArray);
 		Helper.storeDataInAttributeList(vaoID, 3, 2, normalsArray);
 		Helper.generateIndicesBuffer(vaoID, indicesArray);
 		Model model = new Model(vaoID, indicesArray.length);
-		cachedModels.put(file, model);
 		return model; //Loads data into vao
 	}
 	

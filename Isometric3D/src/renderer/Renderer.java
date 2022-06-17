@@ -3,16 +3,27 @@ package renderer;
 import java.util.ArrayList;
 import java.util.List;
 
-import components.TexturedModelRenderer;
+import org.joml.Vector3f;
+
+import components.TexturedModelRendererComponent;
 import main.GameObject;
+import main.Window;
+import scenes.Scene;
+import util.AssetManager;
+import util.Shaders;
 
 public class Renderer {
 	private List<RenderBatch> batches; 
-	
+	private Scene scene;
+	private int[] texSlots = {0, 1, 2, 3, 4, 5, 6, 7};
+	private int shaderID;
+
 	/**
 	 * Initializer
 	 */
-	public Renderer() {
+	public Renderer(Scene scene) {
+		this.scene = scene;
+		this.shaderID = AssetManager.getShader("assets/shaders/default");
 		this.batches = new ArrayList<>();
 	}
 	
@@ -22,7 +33,7 @@ public class Renderer {
 	 * @param gameObject 		GameObject to add
 	 */
 	public void add(GameObject gameObject) {
-		TexturedModelRenderer model = gameObject.getComponent(TexturedModelRenderer.class);
+		TexturedModelRendererComponent model = gameObject.getComponent(TexturedModelRendererComponent.class);
 		if(model != null) {
 			add(model);
 		}
@@ -33,17 +44,17 @@ public class Renderer {
 	 * 
 	 * @param gameObject 		GameObject to add
 	 */
-	public void add(TexturedModelRenderer gameObject) {
+	public void add(TexturedModelRendererComponent gameObject) {
 		boolean added = false;
 		for(RenderBatch b : batches) {
-			if(b.getBatchModel().getVaoID() == gameObject.getModel().getVaoID()) {
+			if(b.getBatchModel() == gameObject.getModel()) {
 				b.add(gameObject);
 				added = true;
 				break;
 			}
 		}
 		if(!added) {
-			RenderBatch newBatch = new RenderBatch(gameObject.getModel());
+			RenderBatch newBatch = new RenderBatch(shaderID, gameObject.getModel());
 			addBatch(newBatch);
 			newBatch.add(gameObject);
 		}
@@ -59,8 +70,21 @@ public class Renderer {
 	}
 	
 	public void render() {
+		Shaders.useShader(shaderID);
+		Shaders.loadMatrix(shaderID, "uProjection", Window.getScene().getCamera().getProjectionMatrix());
+		Shaders.loadMatrix(shaderID, "uView", Window.getScene().getCamera().getViewMatrix());		
+		Shaders.loadIntArray(shaderID, "uTextures", texSlots);
+		Shaders.loadLight(shaderID, "uLight", scene.getSceneLights().get(0));
+		Shaders.loadVector3f(shaderID, "uAmbient", new Vector3f(0.2f, 0.2f, 0.2f));
+		
 		for(RenderBatch b : batches) {
 			b.render();
 		}
+		
+		Shaders.unbindShader();
+	}
+	
+	public Scene getScene() {
+		return this.scene;
 	}
 }

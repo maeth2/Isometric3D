@@ -10,15 +10,14 @@ import static org.lwjgl.stb.STBImage.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
 
 public class TextureLoader {
-	private static Map<Integer, Vector2f> dimensions = new HashMap<>();
-	
+	private static HashMap<Integer, Vector2f> dimensions = new HashMap<>();
+
 	/**
 	 * Load texture from file directory
 	 * 

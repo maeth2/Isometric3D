@@ -3,14 +3,16 @@ package scenes;
 import java.util.ArrayList;
 import java.util.List;
 
+import components.LightComponent;
 import main.Camera;
 import main.GameObject;
 import renderer.Renderer;
 
 public abstract class Scene {	
 	protected Camera camera;
-	protected Renderer renderer = new Renderer();
+	protected Renderer renderer = new Renderer(this);
 	private boolean isRunning = false;
+	private List<LightComponent> lightObjects = new ArrayList<LightComponent>();
 	protected List<GameObject> gameObjects = new ArrayList<GameObject>();
 	
 	public Scene() {}
@@ -34,6 +36,9 @@ public abstract class Scene {
 	 */
 	public void addGameObjectToScene(GameObject g) {
 		gameObjects.add(g);
+		if(g.getComponent(LightComponent.class) != null) {
+			lightObjects.add(g.getComponent(LightComponent.class));
+		}
 		if(isRunning) {
 			g.start();
 			renderer.add(g);
@@ -53,9 +58,19 @@ public abstract class Scene {
 	
 	/**
 	 * Get scene camera
+	 * 
 	 * @return			Scene camera
 	 */
 	public Camera getCamera() {
 		return this.camera;
+	}
+	
+	/**
+	 * Get scene lights
+	 * 
+	 * @return
+	 */
+	public List<LightComponent> getSceneLights(){
+		return this.lightObjects;
 	}
 }
