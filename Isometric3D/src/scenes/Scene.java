@@ -9,6 +9,7 @@ import main.GameObject;
 import renderer.Renderer;
 
 public abstract class Scene {	
+	public static int MAX_SCENE_LIGHTS = 10;
 	protected Camera camera;
 	protected Renderer renderer = new Renderer(this);
 	private boolean isRunning = false;
@@ -36,7 +37,7 @@ public abstract class Scene {
 	 */
 	public void addGameObjectToScene(GameObject g) {
 		gameObjects.add(g);
-		if(g.getComponent(LightComponent.class) != null) {
+		if(g.getComponent(LightComponent.class) != null && lightObjects.size() <= Scene.MAX_SCENE_LIGHTS) {
 			lightObjects.add(g.getComponent(LightComponent.class));
 		}
 		if(isRunning) {

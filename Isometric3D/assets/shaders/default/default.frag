@@ -20,7 +20,8 @@ flat in vec3 fSurfaceNormal;
 in vec3 fCameraPosition;
 
 uniform sampler2D uTexture;
-uniform Light uLight;
+uniform Light uLight[100];
+uniform int uNumOfLights;
 uniform Material uMaterial;
 uniform vec3 uAmbient;
 uniform float uShineDamper;
@@ -67,10 +68,12 @@ void main(){
 	texture = uMaterial.hasTexture == 0 ? vec4(1.0, 1.0, 1.0, 1.0) : texture(uTexture, fTexCoords);
 	vec3 unitNormal = normalize(fSurfaceNormal);
 	vec4 lightColor = vec4(0.0, 0.0, 0.0, 0.0);
-	if(uLight.type == 0){
-		lightColor = calculateDirectionalLight(uLight, unitNormal);
-	}else if(uLight.type == 1){
-		lightColor = calculatePointLight(uLight, unitNormal);
-	} 
+	for(int i = 0; i < uNumOfLights; i++){
+		if(uLight[i].type == 0){
+			lightColor += calculateDirectionalLight(uLight[i], unitNormal);
+		}else if(uLight[i].type == 1){
+			lightColor += calculatePointLight(uLight[i], unitNormal);
+		} 
+	}
 	color = texture * vec4(uAmbient, 1.0) + lightColor;
 }

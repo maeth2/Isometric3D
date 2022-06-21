@@ -74,7 +74,8 @@ public class Renderer {
 		Shaders.loadMatrix(shaderID, "uProjection", Window.getScene().getCamera().getProjectionMatrix());
 		Shaders.loadMatrix(shaderID, "uView", Window.getScene().getCamera().getViewMatrix());		
 		Shaders.loadIntArray(shaderID, "uTextures", texSlots);
-		Shaders.loadLight(shaderID, "uLight", scene.getSceneLights().get(0));
+		Shaders.loadLights(shaderID, "uLight", scene.getSceneLights());
+		Shaders.loadInt(shaderID, "uNumOfLights", scene.getSceneLights().size());
 		Shaders.loadVector3f(shaderID, "uAmbient", new Vector3f(0.2f, 0.2f, 0.2f));
 		Shaders.loadFloat(shaderID, "uShineDamper", 20.0f);
 		

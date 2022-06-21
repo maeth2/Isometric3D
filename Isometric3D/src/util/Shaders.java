@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.List;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -170,6 +171,19 @@ public class Shaders {
 	public static void loadIntArray(int shaderID, String name, int[] data) {
 		int location = glGetUniformLocation(shaderID, name);
 		glUniform1iv(location, data);
+	}
+	
+	/**
+	 * Uploads List of Light data into uniform variable in shader
+	 * 
+	 * @param shaderID			Shader program ID
+	 * @param name				Name of uniform variable
+	 * @param data				List of light data to upload	 
+	 */
+	public static void loadLights(int shaderID, String name, List<LightComponent> data) {
+		for(int i = 0; i < data.size(); i++) {
+			loadLight(shaderID, name + "[" + i + "]", data.get(i));
+		}
 	}
 	
 	/**
