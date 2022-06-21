@@ -30,50 +30,50 @@ public class OBJLoader {
 		}
 		
 		BufferedReader reader = new BufferedReader(fr);//Puts file into buffered reader
-		String line;
+		String line = "";
 		List<Vector3f> vertices = new ArrayList<Vector3f>(); //creates List for all the vertices ordered
 		List<Vector2f> textures = new ArrayList<Vector2f>(); //creates List for all the texture coords unordered
 		List<Vector3f> normals = new ArrayList<Vector3f>(); //creates List for all the normals ordered
 		List<Integer> indices = new ArrayList<Integer>(); //creates List for all the indices ordered
 		
-		float[] verticesArray = null; //creates float array for all the vertices ordered
-		float[] texturesArray = null; //creates float array for all the texture coords ordered
-		float[] normalsArray = null; //creates float array for all the texture coords ordered
-		int[] indicesArray = null; //creates float array for all the indices ordered
+		float[] verticesArray = new float[0]; //creates float array for all the vertices ordered
+		float[] texturesArray = new float[0]; //creates float array for all the texture coords ordered
+		float[] normalsArray = new float[0]; //creates float array for all the texture coords ordered
+		int[] indicesArray = new int[0]; //creates float array for all the indices ordered
 		
 		try{
-			while(true){
-				line = reader.readLine();
-				String[] currentLine = line.split(" ");//splits line into sections based on spaces
-				if(line.startsWith("v ")){ //checks if line is a vertice element holder
-					Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]),Float.parseFloat(currentLine[2]),Float.parseFloat(currentLine[3])); //converts text to float
-					vertices.add(vertex); //places vertex into unordered vertice list
-				}else if(line.startsWith("vt ")){ //checks if line is a texture coord element holder
-					Vector2f texture = new Vector2f(Float.parseFloat(currentLine[1]),Float.parseFloat(currentLine[2]));
-					textures.add(texture); //adds texture coord into unordered texture coord list;
-				}else if(line.startsWith("vn ")){ //checks if line is a texture coord element holder
-					Vector3f normal = new Vector3f(Float.parseFloat(currentLine[1]),Float.parseFloat(currentLine[2]), Float.parseFloat(currentLine[3]));
-					normals.add(normal); //adds texture coord into unordered texture coord list;
-				}else if(line.startsWith("f ")){ //checks if line is a face element holder
-					texturesArray = new float[vertices.size()*2]; //sets size of ordered texture coord array
-					normalsArray = new float[vertices.size()*3]; //sets size of ordered texture coord array
-					break;
+			while(line != null) {
+				while(!line.startsWith("f ")){
+					line = reader.readLine();
+					String[] currentLine = line.split(" ");//splits line into sections based on spaces
+					if(line.startsWith("v ")){ //checks if line is a vertice element holder
+						Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]),Float.parseFloat(currentLine[2]),Float.parseFloat(currentLine[3])); //converts text to float
+						vertices.add(vertex); //places vertex into unordered vertice list
+					}else if(line.startsWith("vt ")){ //checks if line is a texture coord element holder
+						Vector2f texture = new Vector2f(Float.parseFloat(currentLine[1]),Float.parseFloat(currentLine[2]));
+						textures.add(texture); //adds texture coord into unordered texture coord list;
+					}else if(line.startsWith("vn ")){ //checks if line is a texture coord element holder
+						Vector3f normal = new Vector3f(Float.parseFloat(currentLine[1]),Float.parseFloat(currentLine[2]), Float.parseFloat(currentLine[3]));
+						normals.add(normal); //adds texture coord into unordered texture coord list;
+					}
 				}
-			}		
-			while(line != null){
-				if(!line.startsWith("f ")){ //checks if line is not a face element holder
-					line = reader.readLine(); // if line is not a indices holder continue
-					continue;
+				texturesArray = extend(texturesArray, vertices.size()*2); //sets size of ordered texture coord array
+				normalsArray = extend(normalsArray, vertices.size()*3); //sets size of ordered texture coord array
+				while(line != null && !line.startsWith("o ")){
+					if(!line.startsWith("f ")){ //checks if line is not a face element holder
+						line = reader.readLine(); // if line is not a indices holder continue
+						continue;
+					}
+					String[] currentLine = line.split(" "); //splits face data into 3 vertices
+					String[] vertex1 = currentLine[1].split("/"); //splits the data into vertices data
+					String[] vertex2 = currentLine[2].split("/"); //splits the data into texture coord data
+					String[] vertex3 = currentLine[3].split("/"); //splits the data into normals data
+	
+					processVertexData(vertex1, indices, normals, textures, normalsArray, texturesArray); //connects vertex with corresponding texture coord and normal based on indice data
+					processVertexData(vertex2, indices, normals, textures, normalsArray, texturesArray); //connects vertex with corresponding texture coord and normal based on indice data
+					processVertexData(vertex3, indices, normals, textures, normalsArray, texturesArray); //connects vertex with corresponding texture coord and normal based on indice data
+					line = reader.readLine(); //continue to next line
 				}
-				String[] currentLine = line.split(" "); //splits face data into 3 vertices
-				String[] vertex1 = currentLine[1].split("/"); //splits the data into vertices data
-				String[] vertex2 = currentLine[2].split("/"); //splits the data into texture coord data
-				String[] vertex3 = currentLine[3].split("/"); //splits the data into normals data
-
-				processVertexData(vertex1, indices, normals, textures, normalsArray, texturesArray); //connects vertex with corresponding texture coord and normal based on indice data
-				processVertexData(vertex2, indices, normals, textures, normalsArray, texturesArray); //connects vertex with corresponding texture coord and normal based on indice data
-				processVertexData(vertex3, indices, normals, textures, normalsArray, texturesArray); //connects vertex with corresponding texture coord and normal based on indice data
-				line = reader.readLine(); //continue to next line
 			}
 			
 			verticesArray = new float[vertices.size()*3];
@@ -102,13 +102,22 @@ public class OBJLoader {
 		return model; //Loads data into vao
 	}
 	
+	private static float[] extend(float[] array, int length) {
+		float[] extended = new float[array.length + length];
+		for(int i = 0; i < array.length; i++) {
+			extended[i] = array[i];
+		}
+		return extended;
+	}
 	private static void processVertexData(String[] vertexData, List<Integer> indices, List<Vector3f> normals, List<Vector2f> textures, float[] normalsArray, float[] texturesArray ){
-		int vertexPointer = Integer.parseInt(vertexData[0])-1;
+		int vertexPointer = Integer.parseInt(vertexData[0]) - 1;
 		indices.add(vertexPointer);
 		
-		Vector2f textureCoords = textures.get(Integer.parseInt(vertexData[1])-1);
-		texturesArray[vertexPointer * 2] = textureCoords.x;
-		texturesArray[vertexPointer * 2 + 1] = textureCoords.y;
+		if(vertexData[1] != "") {
+			Vector2f textureCoords = textures.get(Integer.parseInt(vertexData[1])-1);
+			texturesArray[vertexPointer * 2] = textureCoords.x;
+			texturesArray[vertexPointer * 2 + 1] = textureCoords.y;
+		}
 
 		Vector3f normalCoords = normals.get(Integer.parseInt(vertexData[2])-1);
 		normalsArray[vertexPointer * 3] = normalCoords.x;
