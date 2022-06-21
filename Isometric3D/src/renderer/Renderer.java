@@ -76,6 +76,7 @@ public class Renderer {
 		Shaders.loadIntArray(shaderID, "uTextures", texSlots);
 		Shaders.loadLight(shaderID, "uLight", scene.getSceneLights().get(0));
 		Shaders.loadVector3f(shaderID, "uAmbient", new Vector3f(0.2f, 0.2f, 0.2f));
+		Shaders.loadFloat(shaderID, "uShineDamper", 20.0f);
 		
 		for(RenderBatch b : batches) {
 			b.render();

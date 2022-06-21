@@ -6,6 +6,7 @@ layout(location=2) in vec3 aNormal;
 out vec2 fTexCoords;
 out vec3 fPosition;
 flat out vec3 fSurfaceNormal;
+out vec3 fCameraPosition;
 
 uniform mat4 uProjection;
 uniform mat4 uTransformation;
@@ -17,5 +18,6 @@ void main(){
 	fSurfaceNormal = (uTransformation * vec4(aNormal, 0.0)).xyz;
 	vec4 mvPosition = modelViewMatrix * vec4(aPos,1.0);
 	gl_Position = uProjection * mvPosition;
-	fPosition = mvPosition.xyz;
+	fPosition = (uTransformation * vec4(aPos, 1.0)).xyz;
+	fCameraPosition = (inverse(uView) * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
 }

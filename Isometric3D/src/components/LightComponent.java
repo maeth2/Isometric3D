@@ -3,6 +3,9 @@ package components;
 import org.joml.Vector3f;
 
 public class LightComponent extends Component {
+	public static final int TYPE_LIGHT_DIRECTIONAL = 0;
+	public static final int TYPE_LIGHT_POINT = 1;
+	
 	private Vector3f color;
 	private Vector3f attenuation;
 	private int lightType;

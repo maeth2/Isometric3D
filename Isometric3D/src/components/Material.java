@@ -4,6 +4,10 @@ public class Material {
 	int textureID;
 	float reflectance;
 	
+	public Material() {
+		init(0, 1);
+	}
+	
 	public Material(int textureID) {
 		init(textureID, 1);
 	}
@@ -20,12 +24,21 @@ public class Material {
 		this.textureID = textureID;
 		this.reflectance = reflectance;
 	}
-	
+
 	public int getTextureID() {
-		return this.textureID;
+		return textureID;
+	}
+
+	public void setTextureID(int textureID) {
+		this.textureID = textureID;
+	}
+
+	public float getReflectance() {
+		return reflectance;
+	}
+
+	public void setReflectance(float reflectance) {
+		this.reflectance = reflectance;
 	}
 	
-	public float getReflectance() {
-		return this.reflectance;
-	}
 }
