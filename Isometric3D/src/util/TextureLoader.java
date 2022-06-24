@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL32.*;
 import static org.lwjgl.stb.STBImage.*;
 
 import java.nio.ByteBuffer;
@@ -41,7 +42,6 @@ public class TextureLoader {
 		
 		if(image != null) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-			dimensions.put(texID, new Vector2f(width.get(0), height.get(0)));
 		}else {
 			glDeleteTextures(texID);
 			texID = -1;
@@ -52,6 +52,48 @@ public class TextureLoader {
 		glBindTexture(GL_TEXTURE_2D, 0);
 		
 		return texID;
+	}
+	
+	/**
+	 * Generate blank texture
+	 * 
+	 * @param width			Width of texture
+	 * @param height		Height of texture
+	 * @param frameBuffer		Frame Buffer ID
+	 * @return				Texture ID
+	 */
+	public static int generateTexture(int width, int height, int frameBuffer) {
+		int texture = glGenTextures();
+		dimensions.put(texture, new Vector2f(width, height));	
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, (ByteBuffer) null);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		return texture;
+	}
+	
+	/**
+	 * Generate blank depth texture
+	 * 
+	 * @param width			Width of texture
+	 * @param height		Height of texture
+	 * @param frameBuffer		Frame Buffer ID
+	 * @return				Texture ID
+	 */
+	public static int generateDepthTexture(int width, int height, int frameBuffer) {
+		int texture = glGenTextures();
+		dimensions.put(texture, new Vector2f(width, height));	
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, (ByteBuffer) null);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		return texture;
 	}
 	
 	/**

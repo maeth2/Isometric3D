@@ -6,29 +6,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL30;
+
+import static org.lwjgl.opengl.GL30.*;
+
 public class Helper {
 	private static List<Integer> vaos = new ArrayList<Integer>();
 	private static List<Integer> vbos = new ArrayList<Integer>();
 	
 	/**
-	 * Creates a OpenGL VAO
+	 * Creates an OpenGL VAO
 	 * 
 	 * @return 		VAO ID
 	 */
 	public static int generateVAO() {
-		int id = GL30.glGenVertexArrays();
+		int id = glGenVertexArrays();
 		vaos.add(id);
 		return id;
 	}
 	
 	/**
-	 * Creates a OpenGL VBO
+	 * Creates an OpenGL VBO
 	 * 
 	 * @return 		VBO ID
 	 */
 	private static int generateVBO() {
-		int id = GL30.glGenBuffers();
+		int id = glGenBuffers();
 		vbos.add(id);
 		return id;
 	}
@@ -39,10 +41,10 @@ public class Helper {
 	public static void dispose() {
 		System.out.println("CLEANING UP!");
 		for(int vao : vaos) {
-			GL30.glDeleteVertexArrays(vao);
+			glDeleteVertexArrays(vao);
 		}
 		for(int vbo : vbos) {
-			GL30.glDeleteVertexArrays(vbo);
+			glDeleteVertexArrays(vbo);
 		}
 	}
 	
@@ -54,16 +56,16 @@ public class Helper {
 	 * @return 			VBO ID
 	 */
 	public static int generateIndicesBuffer(int vaoID, int[] array) {
-		GL30.glBindVertexArray(vaoID);
+		glBindVertexArray(vaoID);
 		int id = generateVBO();
 
 		IntBuffer buffer = BufferUtils.createIntBuffer(array.length);
 		buffer.put(array).flip();
 		
-		GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, id);
-		GL30.glBufferData(GL30.GL_ELEMENT_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
 		
-		GL30.glBindVertexArray(0);
+		glBindVertexArray(0);
 		return id;
 	}
 	
@@ -77,15 +79,15 @@ public class Helper {
 	 * @return 				VBO ID
 	 */
 	public static int storeDataInAttributeList(int vaoID, int size, int attribute, float[] array) {
-		GL30.glBindVertexArray(vaoID);
+		glBindVertexArray(vaoID);
 		int id = generateVBO();
 		
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
 		buffer.put(array).flip();
-		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, id);
-		GL30.glBufferData(GL30.GL_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
-		GL30.glVertexAttribPointer(attribute, size, GL30.GL_FLOAT, false, 0, 0);
-		GL30.glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, id);
+		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+		glVertexAttribPointer(attribute, size, GL_FLOAT, false, 0, 0);
+		glBindVertexArray(0);
 		
 		return id;
 	}
@@ -103,13 +105,13 @@ public class Helper {
 	 * @return 				VBO ID
 	 */
 	public static int storeDataInAttributeList(int vaoID, int vboID, int size, int[][] groups, float[] array) {
-		GL30.glBindVertexArray(vaoID);
+		glBindVertexArray(vaoID);
 		
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
 		buffer.put(array).flip();
 		
-		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vboID);
-		GL30.glBufferData(GL30.GL_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
 		
 		int skip = 0;
 		for(int[] i : groups) {
@@ -117,7 +119,7 @@ public class Helper {
 			skip += i[1];
 		}
 		
-		GL30.glBindVertexArray(0);
+		glBindVertexArray(0);
 		
 		return vboID;
 	}
@@ -134,14 +136,14 @@ public class Helper {
 	 * @return 				VBO ID
 	 */
 	public static int storeDataInAttributeList(int vaoID, int size, int[][] groups, float[] array) {
-		GL30.glBindVertexArray(vaoID);
+		glBindVertexArray(vaoID);
 		int id = generateVBO();
 		
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
 		buffer.put(array).flip();
 		
-		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, id);
-		GL30.glBufferData(GL30.GL_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, id);
+		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
 		
 		int skip = 0;
 		for(int[] i : groups) {
@@ -149,7 +151,7 @@ public class Helper {
 			skip += i[1];
 		}
 		
-		GL30.glBindVertexArray(0);
+		glBindVertexArray(0);
 		
 		return id;
 	}
@@ -165,11 +167,11 @@ public class Helper {
 	 * @return 				VBO ID
 	 */
 	public static int storeDataInAttributeList(int vaoID, int totalSize, int size, int[][] groups) {
-		GL30.glBindVertexArray(vaoID);
+		glBindVertexArray(vaoID);
 		int id = generateVBO();
 		
-		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, id);
-		GL30.glBufferData(GL30.GL_ARRAY_BUFFER, totalSize * Float.BYTES, GL30.GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, id);
+		glBufferData(GL_ARRAY_BUFFER, totalSize * Float.BYTES, GL_DYNAMIC_DRAW);
 		
 		int skip = 0;
 		for(int[] i : groups) {
@@ -177,7 +179,7 @@ public class Helper {
 			skip += i[1];
 		}
 		
-		GL30.glBindVertexArray(0);
+		glBindVertexArray(0);
 		
 		return id;
 	}
@@ -192,7 +194,7 @@ public class Helper {
 	 * @param offset			Number of data to skip at the start of reading
 	 */
 	public static void setAttributePointers(int vaoID, int attribute, int size, int skip, int offset) {
-		GL30.glVertexAttribPointer(attribute, size, GL30.GL_FLOAT, false, (size + skip) * Float.BYTES, offset * Float.BYTES);
-		GL30.glEnableVertexAttribArray(attribute);
+		glVertexAttribPointer(attribute, size, GL_FLOAT, false, (size + skip) * Float.BYTES, offset * Float.BYTES);
+		glEnableVertexAttribArray(attribute);
 	}
 }

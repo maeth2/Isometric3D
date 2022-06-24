@@ -8,7 +8,7 @@ import util.Maths;
 public class Camera extends GameObject{
 	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.01f;
-	private static final float FAR_PLANE = 3000;
+	private static final float FAR_PLANE = 100;
 	private Matrix4f projectionMatrix;
 	private GameObject target;
 	

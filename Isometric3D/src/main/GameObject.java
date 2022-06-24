@@ -77,9 +77,10 @@ public class GameObject {
 	 * 
 	 * @param c			Component to add
 	 */
-	public void addComponent(Component c) {
+	public GameObject addComponent(Component c) {
 		components.add(c);
 		c.gameObject = this;
+		return this;
 	}
 	
 	/**

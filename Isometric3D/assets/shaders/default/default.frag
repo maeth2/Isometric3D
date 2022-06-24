@@ -60,7 +60,7 @@ vec4 calculatePointLight(Light light, vec3 normal){
 	
 	float distance = length(lightDirection);
 	float attenuationInv = light.attenuation.x + light.attenuation.y * distance + light.attenuation.z * distance * distance;
-	
+		
 	return (specularColor + diffuseColor) / attenuationInv;
 }
 

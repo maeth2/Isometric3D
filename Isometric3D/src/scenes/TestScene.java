@@ -22,10 +22,29 @@ public class TestScene extends Scene{
 	
 	@Override
 	public void init() {
-		camera = new Camera(new Vector3f(0, 0, 2));
+		camera = new Camera(new Vector3f(0, 0, 5));
 		this.addGameObjectToScene(camera);
+
+		GameObject light = new GameObject(
+			"light", 
+			new Transform(
+				new Vector3f(
+					0.5f, 
+					0.5f, 
+					0
+				)
+			)
+		);
+		light.addComponent(
+			new LightComponent(
+				LightComponent.TYPE_LIGHT_DIRECTIONAL,
+				0.5f,
+				new Vector3f(1, 1, 1)
+			)
+		);
+		this.addGameObjectToScene(light);
 		
-		m = new Material(AssetManager.getTexture("assets/textures/blank.png"), 2f);
+		m = new Material(2f);
 		for(int i = 0; i < 1; i++) {
 			GameObject dragon = new GameObject(
 				"dragon",
@@ -43,6 +62,21 @@ public class TestScene extends Scene{
 			);
 			this.addGameObjectToScene(dragon);
 		}
+		
+		GameObject dragon = new GameObject(
+				"dragon",
+				new Transform(
+						new Vector3f(0, -10, 0),
+						10f
+				)
+			);
+			dragon.addComponent(
+				new TexturedModelRendererComponent(
+					AssetManager.getModel("assets/models/cube.obj"),
+					m
+				)
+			);
+			this.addGameObjectToScene(dragon);
 	}
 
 	@Override
@@ -69,7 +103,7 @@ public class TestScene extends Scene{
 			light.addComponent(
 				new LightComponent(
 					LightComponent.TYPE_LIGHT_POINT, 
-					1f, 
+					0.5f, 
 					new Vector3f((float)Math.random(), (float)Math.random(), (float)Math.random()), 
 					new Vector3f(1, 0.1f, 0.01f)
 				)

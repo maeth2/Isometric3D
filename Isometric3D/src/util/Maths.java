@@ -1,10 +1,24 @@
 package util;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 
 import main.Transform;
 
 public class Maths {
+	
+	/**
+	 * Creates transformational matrix from a transform
+	 * 
+	 * @param transform			Base transforms
+	 * @return					Transformation matrix
+	 */
+	public static Matrix4f createTransformationalMatrix(Vector2f position, Vector2f scale){
+		Matrix4f matrix = new Matrix4f();
+		matrix.identity().translate(position.x, position.y, 0).scale(scale.x, scale.y, 1);
+		return matrix;
+	}
+	
 	/**
 	 * Creates transformational matrix from a transform
 	 * 

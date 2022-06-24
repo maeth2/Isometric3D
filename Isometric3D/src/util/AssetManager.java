@@ -33,6 +33,36 @@ public class AssetManager {
 	}
 	
 	/**
+	 * Generates blank texture
+	 * 
+	 * @param name				Name of texture
+	 * @param width				Width of texture
+	 * @param height			Height of texture
+	 * @param frameBuffer		Frame Buffer ID
+	 * @return					Texture ID
+	 */
+	public static int generateTexture(String name, int width, int height, int frameBuffer) {
+		int id = TextureLoader.generateTexture(width, height, frameBuffer);
+		textures.put(name, id);
+		return id;
+	}
+
+	/**
+	 * Generates blank depth texture
+	 * 
+	 * @param name				Name of texture
+	 * @param width				Width of texture
+	 * @param height			Height of texture
+	 * @param frameBuffer		Frame Buffer ID
+	 * @return					Texture ID
+	 */
+	public static int generateDepthTexture(String name, int width, int height, int frameBuffer) {
+		int id = TextureLoader.generateDepthTexture(width, height, frameBuffer);
+		textures.put(name, id);
+		return id;
+	}
+	
+	/**
 	 * Loads shader from assets
 	 * 
 	 * @param filePath				Shader file path
@@ -67,7 +97,7 @@ public class AssetManager {
 			return model;
 		}
 	}
-	
+
 	/**
 	 * Cleans up all assets
 	 */

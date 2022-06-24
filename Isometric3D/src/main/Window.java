@@ -131,9 +131,7 @@ public class Window {
 		while(!glfwWindowShouldClose(glfwWindow)) {
 			// Poll events
 			glfwPollEvents();
-			
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			
+									
 			if(dt >= 0) {
 				currentScene.update(dt);
 			}

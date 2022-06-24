@@ -17,11 +17,9 @@ import util.TextureLoader;
 
 public class RenderBatch {
 	private Model batchModel;
-	private int shaderID;
 	private ArrayList<TexturedModelRendererComponent> models = new ArrayList<TexturedModelRendererComponent>();
 
 	public RenderBatch(int shaderID, Model batchModel) {
-		this.shaderID = shaderID;
 		this.batchModel = batchModel;
 	}
 	
@@ -29,12 +27,11 @@ public class RenderBatch {
 		models.add(t);
 	}
 
-	public void render() {				
+	public void render(int shaderID) {		
 		glBindVertexArray(batchModel.getVaoID());
 		glEnableVertexAttribArray(0); 
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
-
 
 		for(TexturedModelRendererComponent m : models) {
 			TextureLoader.loadTextureToShader(shaderID, m.getMaterial().getTextureID(), 0);

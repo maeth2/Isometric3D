@@ -3,6 +3,7 @@ package scenes;
 import java.util.ArrayList;
 import java.util.List;
 
+import components.GUIComponent;
 import components.LightComponent;
 import main.Camera;
 import main.GameObject;
@@ -11,10 +12,11 @@ import renderer.Renderer;
 public abstract class Scene {	
 	public static int MAX_SCENE_LIGHTS = 10;
 	protected Camera camera;
-	protected Renderer renderer = new Renderer(this);
 	private boolean isRunning = false;
-	private List<LightComponent> lightObjects = new ArrayList<LightComponent>();
+	protected List<LightComponent> lightObjects = new ArrayList<LightComponent>();
 	protected List<GameObject> gameObjects = new ArrayList<GameObject>();
+	protected List<GUIComponent> guis = new ArrayList<GUIComponent>();
+	protected Renderer renderer = new Renderer(this);
 	
 	public Scene() {}
 	
@@ -39,6 +41,9 @@ public abstract class Scene {
 		gameObjects.add(g);
 		if(g.getComponent(LightComponent.class) != null && lightObjects.size() <= Scene.MAX_SCENE_LIGHTS) {
 			lightObjects.add(g.getComponent(LightComponent.class));
+		}
+		if(g.getComponent(GUIComponent.class) != null) {
+			guis.add(g.getComponent(GUIComponent.class));
 		}
 		if(isRunning) {
 			g.start();
@@ -73,5 +78,14 @@ public abstract class Scene {
 	 */
 	public List<LightComponent> getSceneLights(){
 		return this.lightObjects;
+	}
+	
+	/**
+	 * Get GUIs
+	 * 
+	 * @return
+	 */
+	public List<GUIComponent> getGUIs(){
+		return this.guis;
 	}
 }
