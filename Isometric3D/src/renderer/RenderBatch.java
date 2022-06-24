@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL30.*;
 import components.Model;
 import components.TexturedModelRendererComponent;
 import util.Maths;
-import util.Shaders;
+import util.ShaderLoader;
 import util.TextureLoader;
 
 public class RenderBatch {
@@ -35,8 +35,8 @@ public class RenderBatch {
 
 		for(TexturedModelRendererComponent m : models) {
 			TextureLoader.loadTextureToShader(shaderID, m.getMaterial().getTextureID(), 0);
-			Shaders.loadMatrix(shaderID, "uTransformation", Maths.createTransformationalMatrix(m.gameObject.transform));
-			Shaders.loadMaterial(shaderID, "uMaterial", m.getMaterial());
+			ShaderLoader.loadMatrix(shaderID, "uTransformation", Maths.createTransformationalMatrix(m.gameObject.transform));
+			ShaderLoader.loadMaterial(shaderID, "uMaterial", m.getMaterial());
 			glDrawElements(GL_TRIANGLES, batchModel.getVertexCount(), GL_UNSIGNED_INT, 0);
 		}
 		

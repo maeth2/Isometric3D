@@ -6,7 +6,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 import components.GUIComponent;
 import util.AssetManager;
-import util.Shaders;
+import util.ShaderLoader;
 import util.TextureLoader;
 
 public class GUIRenderer {
@@ -18,15 +18,15 @@ public class GUIRenderer {
 	}
 	
 	public void render(List<GUIComponent> guis) {
-		Shaders.useShader(GUIShaderID);
+		ShaderLoader.useShader(GUIShaderID);
 		
 		for(GUIComponent g : guis) {
-			Shaders.loadMatrix(GUIShaderID, "uTransformation", g.getTransformMatrix());
+			ShaderLoader.loadMatrix(GUIShaderID, "uTransformation", g.getTransformMatrix());
 			renderQuad(GUIShaderID, g.getTexture());
 		}
 		
 
-		Shaders.unbindShader();
+		ShaderLoader.unbindShader();
 	}
 	
 	public void renderQuad(int shader, int texture) {

@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import scenes.Scene;
 
-public class Loader {
+public class LevelLoader {
 	
 	/**
 	 * Loads level txt file into game

@@ -36,19 +36,6 @@ public class Helper {
 	}
 	
 	/**
-	 * Disposes of all VAO and VBO from video memory
-	 */
-	public static void dispose() {
-		System.out.println("CLEANING UP!");
-		for(int vao : vaos) {
-			glDeleteVertexArrays(vao);
-		}
-		for(int vbo : vbos) {
-			glDeleteVertexArrays(vbo);
-		}
-	}
-	
-	/**
 	 * Creates a OpenGL VBO and stores indices as an element buffer
 	 * 
 	 * @param vaoID		VAO ID
@@ -196,5 +183,19 @@ public class Helper {
 	public static void setAttributePointers(int vaoID, int attribute, int size, int skip, int offset) {
 		glVertexAttribPointer(attribute, size, GL_FLOAT, false, (size + skip) * Float.BYTES, offset * Float.BYTES);
 		glEnableVertexAttribArray(attribute);
+	}
+	
+	
+	/**
+	 * Cleans up all VAOs and VBOs from memory
+	 */
+	public static void dispose() {
+		System.out.println("CLEANING UP!");
+		for(int vao : vaos) {
+			glDeleteVertexArrays(vao);
+		}
+		for(int vbo : vbos) {
+			glDeleteVertexArrays(vbo);
+		}
 	}
 }

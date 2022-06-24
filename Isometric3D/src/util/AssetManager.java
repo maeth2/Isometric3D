@@ -14,7 +14,7 @@ public class AssetManager {
 	public static Map<String, Model> models = new HashMap<>();
 	
 	/**
-	 * Loads texture from assets
+	 * Loads texture from system
 	 * 
 	 * @param filePath				Image file path
 	 * @return						Texture ID
@@ -73,7 +73,7 @@ public class AssetManager {
 		if(shaders.containsKey(file)) {
 			return shaders.get(file);
 		}else {
-			int shaderID = Shaders.buildShader(file);
+			int shaderID = ShaderLoader.buildShader(file);
 			if(shaderID > -1) {
 				shaders.put(file, shaderID);
 			}
@@ -99,7 +99,7 @@ public class AssetManager {
 	}
 
 	/**
-	 * Cleans up all assets
+	 * Cleans up all textures and shaders from memory
 	 */
 	public static void dispose() {
 		for(String s : shaders.keySet()) {

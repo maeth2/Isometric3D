@@ -17,7 +17,7 @@ import components.Material;
 
 import static org.lwjgl.opengl.GL20.*;
 
-public class Shaders {	
+public class ShaderLoader {	
 	/**
 	 * Find and build GLSL shader program from directory
 	 * 

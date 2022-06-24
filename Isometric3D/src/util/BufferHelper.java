@@ -7,7 +7,7 @@ import java.util.List;
 
 import main.Window;
 
-public class FBOHelper {
+public class BufferHelper {
 	private static List<Integer> rbos = new ArrayList<Integer>();
 	private static List<Integer> fbos = new ArrayList<Integer>();
 
@@ -82,6 +82,9 @@ public class FBOHelper {
 		return id;
 	}
 	
+	/**
+	 * Cleans up all FBOs and RBOs from memory
+	 */
 	public static void dispose() {
 		for(int fbo : fbos) {
 			glDeleteFramebuffers(fbo);
