@@ -60,10 +60,14 @@ public class BufferHelper {
 	 * Creates a Frame Buffer 
 	 * @return			Frame Buffer ID
 	 */
-	public static int createFrameBuffer(int width, int height) {
+	public static int createFrameBuffer(int width, int height, int attachments) {
 		int id = generateFBO();
 		glBindFramebuffer(GL_FRAMEBUFFER, id);
-		glDrawBuffer(GL_COLOR_ATTACHMENT0);
+		int[] buffers = new int[attachments];
+		for(int i = 0; i < attachments; i++) {
+			buffers[i] = GL_COLOR_ATTACHMENT0 + i;
+		}
+		glDrawBuffers(buffers);
 		createDepthBufferAttachment(width, height);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		return id;

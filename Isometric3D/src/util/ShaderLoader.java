@@ -194,7 +194,7 @@ public class ShaderLoader {
 	 * @param data				Light data to upload	 
 	 */
 	public static void loadLight(int shaderID, String name, LightComponent data) {
-		loadVector3f(shaderID, name + ".position", data.gameObject.transform.position);
+		loadVector3f(shaderID, name + ".position", data.getPosition());
 		loadVector3f(shaderID, name + ".color", data.getColor());
 		loadVector3f(shaderID, name + ".attenuation", data.getAttenuation());
 		loadFloat(shaderID, name + ".intensity", data.getIntensity());

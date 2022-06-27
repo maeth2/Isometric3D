@@ -1,9 +1,5 @@
 package util;
 
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL32.*;
 import static org.lwjgl.stb.STBImage.*;
@@ -57,12 +53,13 @@ public class TextureLoader {
 	/**
 	 * Generate blank texture
 	 * 
-	 * @param width			Width of texture
-	 * @param height		Height of texture
+	 * @param width				Width of textures
 	 * @param frameBuffer		Frame Buffer ID
-	 * @return				Texture ID
+	 * @param height			Height of texture
+	 * @param attachement		OpenGL color attachement
+	 * @return					Texture ID
 	 */
-	public static int generateTexture(int width, int height, int frameBuffer) {
+	public static int generateTexture(int frameBuffer, int width, int height, int attachment) {
 		int texture = glGenTextures();
 		dimensions.put(texture, new Vector2f(width, height));	
 		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
@@ -70,7 +67,9 @@ public class TextureLoader {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, (ByteBuffer) null);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		return texture;
 	}
@@ -78,12 +77,12 @@ public class TextureLoader {
 	/**
 	 * Generate blank depth texture
 	 * 
-	 * @param width			Width of texture
-	 * @param height		Height of texture
+	 * @param width				Width of texture
 	 * @param frameBuffer		Frame Buffer ID
-	 * @return				Texture ID
+	 * @param height			Height of texture
+	 * @return					Texture ID
 	 */
-	public static int generateDepthTexture(int width, int height, int frameBuffer) {
+	public static int generateDepthTexture(int frameBuffer, int width, int height) {
 		int texture = glGenTextures();
 		dimensions.put(texture, new Vector2f(width, height));	
 		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
@@ -91,6 +90,8 @@ public class TextureLoader {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, (ByteBuffer) null);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		return texture;
@@ -132,6 +133,17 @@ public class TextureLoader {
 	public static void loadTextureToShader(int shaderID, int textureFile, int slot) {
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, textureFile);
+	}
+	
+	/**
+	 * Loads a texture to shader
+	 * 
+	 * @param shaderID				Shader ID
+	 * @param textureFile			Image ID
+	 * @param slot					OpenGL texture slot to use
+	 */
+	public static void bindTextureToShader(int shaderID, String name, int slot) {
+		ShaderLoader.loadInt(shaderID, name, slot);
 	}
 	
 	/**

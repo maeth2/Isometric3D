@@ -36,13 +36,14 @@ public class AssetManager {
 	 * Generates blank texture
 	 * 
 	 * @param name				Name of texture
+	 * @param frameBuffer		Frame Buffer ID
 	 * @param width				Width of texture
 	 * @param height			Height of texture
-	 * @param frameBuffer		Frame Buffer ID
+	 * @param attachement		OpenGL color attachement
 	 * @return					Texture ID
 	 */
-	public static int generateTexture(String name, int width, int height, int frameBuffer) {
-		int id = TextureLoader.generateTexture(width, height, frameBuffer);
+	public static int generateTexture(String name, int frameBuffer, int width, int height, int attachment) {
+		int id = TextureLoader.generateTexture(frameBuffer, width, height, attachment);
 		textures.put(name, id);
 		return id;
 	}
@@ -51,13 +52,13 @@ public class AssetManager {
 	 * Generates blank depth texture
 	 * 
 	 * @param name				Name of texture
+	 * @param frameBuffer		Frame Buffer ID
 	 * @param width				Width of texture
 	 * @param height			Height of texture
-	 * @param frameBuffer		Frame Buffer ID
 	 * @return					Texture ID
 	 */
-	public static int generateDepthTexture(String name, int width, int height, int frameBuffer) {
-		int id = TextureLoader.generateDepthTexture(width, height, frameBuffer);
+	public static int generateDepthTexture(String name, int frameBuffer, int width, int height) {
+		int id = TextureLoader.generateDepthTexture(frameBuffer, width, height);
 		textures.put(name, id);
 		return id;
 	}

@@ -19,7 +19,7 @@ public class RenderBatch {
 	private Model batchModel;
 	private ArrayList<TexturedModelRendererComponent> models = new ArrayList<TexturedModelRendererComponent>();
 
-	public RenderBatch(int shaderID, Model batchModel) {
+	public RenderBatch(Model batchModel) {
 		this.batchModel = batchModel;
 	}
 	

@@ -3,9 +3,11 @@ package components;
 import org.joml.Vector3f;
 
 public class LightComponent extends Component {
+	
 	public static final int TYPE_LIGHT_DIRECTIONAL = 0;
 	public static final int TYPE_LIGHT_POINT = 1;
 	
+	private Vector3f position;
 	private Vector3f color;
 	private Vector3f attenuation;
 	private int lightType;
@@ -35,10 +37,23 @@ public class LightComponent extends Component {
 	}
 	
 	@Override
+	public void start() {
+		this.position = gameObject.transform.position;
+	}
+	
+	@Override
 	public void update(float dt) {}
 
 	public Vector3f getColor() {
 		return color;
+	}
+
+	public Vector3f getPosition() {
+		return position;
+	}
+
+	public void setPosition(Vector3f position) {
+		this.position = position;
 	}
 
 	public void setColor(Vector3f color) {

@@ -28,8 +28,6 @@ uniform float uShineDamper;
 
 vec4 texture;
 
-out vec4 color;
-
 vec4 calculateDirectionalLight(Light light, vec3 normal){
 	vec3 unitLightVector = normalize(light.position);
 	float diffuseFactor = max(dot(normal, unitLightVector), 0.0);
@@ -75,5 +73,6 @@ void main(){
 			lightColor += calculatePointLight(uLight[i], unitNormal);
 		} 
 	}
-	color = texture * vec4(uAmbient, 1.0) + lightColor;
+	gl_FragData[0] = texture * vec4(uAmbient, 1.0) + lightColor;
+	gl_FragData[1] = vec4((unitNormal + vec3(1)) / 2, 1.0);
 }
